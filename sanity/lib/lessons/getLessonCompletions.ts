@@ -1,6 +1,29 @@
 import { defineQuery } from "groq";
 import { sanityFetch } from "../live";
 
+
+interface Lesson {
+  _id: string;
+  title: string;
+}
+
+interface Module {
+  _id: string;
+  title: string;
+  lessons: Lesson[];
+}
+
+interface Course {
+  _id: string;
+  title: string;
+  modules: Module[];
+}
+
+interface Completion {
+  lesson: Lesson;
+  module: Module;
+}
+
 export async function getLessonCompletions(
   studentId: string,
   courseId: string
@@ -25,13 +48,13 @@ export async function getLessonCompletions(
     params: { studentId, courseId },
   });
 
-  const { course, completedLessons } = result.data;
+  const course: Course = result.data.course;
+  const completedLessons: Completion[] = result.data.completedLessons;
 
-  // Calculate module progress
-  const moduleProgress = course?.modules?.map((module) => {
+  const moduleProgress = course?.modules?.map((module: Module) => {
     const totalLessons = module.lessons?.length || 0;
     const completedInModule = completedLessons.filter(
-      (completion) => completion.module?._id === module._id
+      (completion: Completion) => completion.module?._id === module._id
     ).length;
 
     return {
@@ -43,12 +66,10 @@ export async function getLessonCompletions(
     };
   });
 
-  // Calculate overall course progress
-  const totalLessons =
-    course?.modules?.reduce(
-      (acc, module) => acc + (module?.lessons?.length || 0),
-      0
-    ) || 0;
+  const totalLessons = course?.modules?.reduce(
+    (acc: number, module: Module) => acc + (module?.lessons?.length || 0),
+    0
+  ) || 0;
 
   const totalCompleted = completedLessons?.length || 0;
   const courseProgress =

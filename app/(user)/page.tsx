@@ -1,12 +1,15 @@
 import Hero from "@/components/Hero";
 import { CourseCard } from "@/components/CourseCard";
 import { getCourses } from "@/sanity/lib/courses/getCourses";
+import { GetCoursesQueryResult } from "@/sanity.types";
+
+
 
 export const dynamic = "force-static";
 export const revalidate = 3600; // revalidate at most every hour
 
 export default async function Home() {
-  const courses = await getCourses();
+  const courses: GetCoursesQueryResult = await getCourses();
 
   return (
     <div className="min-h-screen bg-background">

@@ -14,8 +14,7 @@ export interface Module {
 
 export interface Instructor {
   name: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  photo?: any; // You can replace `any` with the correct image type if using Sanity types
+  photo?: string; // You can replace `any` with the correct image type if using Sanity types
   bio?: string;
 }
 
@@ -45,8 +44,7 @@ export interface Course {
   title?: string;
   description?: string;
   price?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  image?: any;
+  image?: string;
   modules?: Module[];
   instructor?: Instructor | null;
   category?: Category | null;

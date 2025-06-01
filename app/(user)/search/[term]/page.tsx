@@ -1,6 +1,8 @@
 import { Search } from "lucide-react";
 import { CourseCard } from "@/components/CourseCard";
 import { searchCourses } from "@/sanity/lib/courses/searchCourses";
+import { GetCoursesQueryResult } from "@/sanity.types";
+
 
 interface SearchPageProps {
   params: Promise<{
@@ -11,7 +13,7 @@ interface SearchPageProps {
 export default async function SearchPage({ params }: SearchPageProps) {
   const { term } = await params;
   const decodedTerm = decodeURIComponent(term);
-  const courses = await searchCourses(decodedTerm);
+  const courses: GetCoursesQueryResult  = await searchCourses(decodedTerm);
 
   return (
     <div className="h-full pt-16">
